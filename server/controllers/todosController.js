@@ -33,13 +33,38 @@ const create = (req, res) => {
 
 //PUT ROUTE: /todos/:id -> updates a todo item based on the id
 const update = (req, res) => {
-    
+    db.Todo.updateOne(req.params.index, req.body, {new:true}, (err, updatedTodo) => {
+        if(err){
+            console.log(`Error updating todo item: ${err}`);
+
+            return res.send(`Error updating todo item: ${err}`)
+        }
+
+        res.status(201).json({
+            updatedTodo,
+        });
+    })
 }
 
 //DELETE ROUTE: /todos/:id -> deletes a todo item based on the id
+const destroy = (req, res) => {
+    db.Todo.deleteOne(req.params.index, (err, deletedTodo) => {
+        if(err){
+            console.log(`Error updating todo item: ${err}`);
+
+            return res.send(`Error updating todo item: ${err}`)
+        }
+
+        res.status(201).json({
+            deletedTodo,
+        });
+    });
+}
 
 //export the controller routes
 module.exports = {
     index,
     create,
+    update,
+    destroy,
 }
